@@ -1,0 +1,160 @@
+FEEDBACK:
+
+-10% late submission.
+
+Good test cases. However, make sure the output conceptually make sense.
+	For example once you garbage collect, shouldn't the soft and hard size be the same?
+
+     SUGGESTION: Always *verify* your results. 
+            Don't assume just because you have an output on the screen that it is correct.
+
+
+-0.5 Incomplete implementation of collectGarbage does not correctly set the root of
+     the tree after calling removeHard. Make sure to set the root in public facing
+     collectGarbage() method:
+        mRoot = collectGarbage(mRoot);
+     See sample output below.
+
+
+-1.5 Hard size is incorrect. Why is hard size less than soft size after 
+    collect garbage is called?
+    Why is removeHard() adding to mSize?
+     protected LazySTNode removeHard( LazySTNode root, E x) {
+        ...
+        // found the node
+        else if (root.lftChild != null && root.rtChild != null) {
+
+            root.data = findMinHard(root.rtChild).data;
+            root.deleted = findMinHard(root.rtChild).deleted;
+            mSize++;
+            ...
+            
+    See sample output below.
+    
+-Bita.
+
+
+
+sample output 1:
+...
+
+at line #3: add tomatoes
+First item: lychee:1 
+Last item: tomatoes:1 
+
+
+Update at line #4: buy lychee
+"hard" number of unique items (i.e. mSizeHard) = 3
+"soft" number of unique items (i.e. mSize) = 2
+
+Testing traversing "hard" inventory:
+lychee:0  milk:1  tomatoes:1  
+
+Testing traversing "soft" inventory:
+milk:1  tomatoes:1  
+
+
+at line #4: buy lychee
+First item: milk:1 
+Last item: tomatoes:1 
+
+at line #4: buy lychee
+calling garbage collection...  <----------------
+
+inventory after garbage collection:
+"hard" number of unique items (i.e. mSizeHard) = 2
+"soft" number of unique items (i.e. mSize) = 2
+
+Testing traversing "hard" inventory:
+lychee:0  milk:1  tomatoes:1  
+
+Testing traversing "soft" inventory:
+milk:1  tomatoes:1  
+
+
+
+sample output 2:
+...
+
+Update at line #7: buy cabbage
+"hard" number of unique items (i.e. mSizeHard) = 4
+"soft" number of unique items (i.e. mSize) = 1
+
+Testing traversing "hard" inventory:
+apple:0  bread:0  butter:1  cabbage:0  
+
+Testing traversing "soft" inventory:
+butter:1  
+
+
+at line #7: buy cabbage
+First item: butter:1 
+Last item: butter:1 
+
+at line #7: buy cabbage
+calling garbage collection...  <----------------
+
+inventory after garbage collection:
+"hard" number of unique items (i.e. mSizeHard) = 1
+"soft" number of unique items (i.e. mSize) = 1
+
+Testing traversing "hard" inventory:
+bread:0  butter:1  
+
+Testing traversing "soft" inventory:
+butter:1  
+
+
+
+State of inventory before cleanup:
+"hard" number of unique items (i.e. mSizeHard) = 1
+"soft" number of unique items (i.e. mSize) = 1
+
+Testing traversing "hard" inventory:
+bread:0  butter:1  
+
+Testing traversing "soft" inventory:
+butter:1  
+
+
+
+Final state of inventory after cleanup:
+"hard" number of unique items (i.e. mSizeHard) = 0
+"soft" number of unique items (i.e. mSize) = 1
+
+Testing traversing "hard" inventory:
+bread:0  butter:1  
+
+Testing traversing "soft" inventory:
+butter:1  
+
+...
+
+
+sample output 3:
+...
+State of inventory before cleanup:
+"hard" number of unique items (i.e. mSizeHard) = 12
+"soft" number of unique items (i.e. mSize) = 15
+
+Testing traversing "hard" inventory:
+apples:1  avocado:1  basil:1  beans:2  bread:0  cake:1  cereal:2  chicken:0  eggplant:2  fish:1  juice:1  linguine:1  milk:2  onion:1  soup:3  spaghetti:1  tomato:4  
+
+Testing traversing "soft" inventory:
+apples:1  avocado:1  basil:1  beans:2  cake:1  cereal:2  eggplant:2  fish:1  juice:1  linguine:1  milk:2  onion:1  soup:3  spaghetti:1  tomato:4  
+
+
+
+Final state of inventory after cleanup:
+"hard" number of unique items (i.e. mSizeHard) = 10
+"soft" number of unique items (i.e. mSize) = 15
+
+Testing traversing "hard" inventory:
+apples:1  avocado:1  basil:1  beans:2  cake:1  cereal:2  eggplant:2  fish:1  juice:1  linguine:1  milk:2  onion:1  soup:3  spaghetti:1  tomato:4  
+
+Testing traversing "soft" inventory:
+apples:1  avocado:1  basil:1  beans:2  cake:1  cereal:2  eggplant:2  fish:1  juice:1  linguine:1  milk:2  onion:1  soup:3  spaghetti:1  tomato:4  
+
+
+
+
